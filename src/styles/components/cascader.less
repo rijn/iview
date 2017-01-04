@@ -3,6 +3,7 @@
 
 .@{cascader-prefix-cls} {
     position: relative;
+    line-height: normal;
 
     .@{css-prefix}input{
         display: block;
@@ -81,6 +82,14 @@
                 background-color: @background-color-select-hover;
                 color: @primary-color;
             }
+        }
+    }
+}
+
+.@{form-item-prefix-cls}-error{
+    .@{cascader-prefix-cls} {
+        &-arrow{
+            color: @error-color;
         }
     }
 }

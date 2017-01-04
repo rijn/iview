@@ -3,7 +3,7 @@
         <label :class="[prefixCls + '-label']" :style="labelStyles" v-if="label">{{ label }}</label>
         <div :class="[prefixCls + '-content']" :style="contentStyles">
             <slot></slot>
-            <div transition="fade" :class="[prefixCls + '-error']" v-if="validateState === 'error'">{{ validateMessage }}</div>
+            <div transition="fade" :class="[prefixCls + '-error-tip']" v-if="validateState === 'error'">{{ validateMessage }}</div>
         </div>
     </div>
 </template>
@@ -219,9 +219,8 @@
                             return false;
                         }
                     });
-                    // todo
-//                    this.$on('el.form.blur', this.onFieldBlur);
-//                    this.$on('el.form.change', this.onFieldChange);
+                    this.$on('on-form-blur', this.onFieldBlur);
+                    this.$on('on-form-change', this.onFieldChange);
                 }
             }
         },
