@@ -3,7 +3,7 @@
         <label :class="[prefixCls + '-label']" :style="labelStyles" v-if="label">{{ label }}</label>
         <div :class="[prefixCls + '-content']" :style="contentStyles">
             <slot></slot>
-            <div transition="fade" :class="[prefixCls + '-error-tip']" v-if="validateState === 'error'">{{ validateMessage }}</div>
+            <div transition="fade" :class="[prefixCls + '-error-tip']" v-if="validateState === 'error' && showMessage && form.showMessage">{{ validateMessage }}</div>
         </div>
     </div>
 </template>
@@ -57,10 +57,14 @@
                 type: [Object, Array]
             },
             error: {
-                type: Boolean
+                type: String
             },
             validateStatus: {
                 type: Boolean
+            },
+            showMessage: {
+                type: Boolean,
+                default: true
             }
         },
         data () {

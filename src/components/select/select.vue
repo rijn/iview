@@ -35,10 +35,12 @@
     import Dropdown from './dropdown.vue';
     import clickoutside from '../../directives/clickoutside';
     import { oneOf, MutationObserver } from '../../utils/assist';
+    import { t } from '../../locale';
 
     const prefixCls = 'ivu-select';
 
     export default {
+        name: 'iSelect',
         components: { Icon, Dropdown },
         directives: { clickoutside },
         props: {
@@ -60,7 +62,9 @@
             },
             placeholder: {
                 type: String,
-                default: '请选择'
+                default () {
+                    return t('i.select.placeholder');
+                }
             },
             filterable: {
                 type: Boolean,
@@ -80,7 +84,9 @@
             },
             notFoundText: {
                 type: String,
-                default: '无匹配数据'
+                default () {
+                    return t('i.select.noMatch');
+                }
             }
         },
         data () {
@@ -442,14 +448,16 @@
                     const model = this.model;
 
                     if (this.multiple) {
-                        //
+                        this.query = '';
                     } else {
                         if (model !== '') {
                             this.findChild((child) => {
                                 if (child.value === model) {
-                                    this.query = child.searchLabel;
+                                    this.query = child.label === undefined ? child.searchLabel : child.label;
                                 }
                             });
+                        } else {
+                            this.query = '';
                         }
                     }
                 }, 300);
@@ -472,7 +480,7 @@
                 this.query = query;
             }
         },
-        ready () {
+        compiled () {
             if (!this.multiple && this.filterable && this.model) {
                 this.findChild((child) => {
                     if (this.model === child.value) {
@@ -548,6 +556,7 @@
                     });
                     this.notFound = is_hidden;
                 });
+                this.$broadcast('on-update-popper');
             }
         },
         events: {
@@ -574,7 +583,7 @@
                         if (this.filterable) {
                             this.findChild((child) => {
                                 if (child.value === value) {
-                                    this.query = child.searchLabel;
+                                    this.query = child.label === undefined ? child.searchLabel : child.label;
                                 }
                             });
                         }

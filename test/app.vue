@@ -48,6 +48,11 @@ li + li {
                 <li><a v-link="'/date'">Date</a></li>
                 <li><a v-link="'/autocomplete'">AutoComplete</a></li>
                 <li><a v-link="'/form'">Form</a></li>
+                <li><a v-link="'/carousel'">Carousel</a></li>
+                <li><a v-link="'/rate'">Rate</a></li>
+                <li><a v-link="'/upload'">Upload</a></li>
+                <li><a v-link="'/tree'">Tree</a></li>
+                <li><a v-link="'/notice'">Notice</a></li>
             </ul>
         </nav>
         <router-view></router-view>

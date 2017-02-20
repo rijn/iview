@@ -1,14 +1,17 @@
 <template>
     <div :class="classes" v-clickoutside="handleClose">
-        <i-input
-            readonly
-            :disabled="disabled"
-            :value.sync="displayRender"
-            :size="size"
-            :placeholder="placeholder"
-            @on-focus="onFocus"></i-input>
-        <Icon type="ios-close" :class="[prefixCls + '-arrow']" v-show="showCloseIcon" @click.stop="clearSelect"></Icon>
-        <Icon type="arrow-down-b" :class="[prefixCls + '-arrow']"></Icon>
+        <div :class="[prefixCls + '-rel']" @click="toggleOpen">
+            <slot>
+                <i-input
+                    readonly
+                    :disabled="disabled"
+                    :value.sync="displayRender"
+                    :size="size"
+                    :placeholder="placeholder"></i-input>
+                <Icon type="ios-close" :class="[prefixCls + '-arrow']" v-show="showCloseIcon" @click.stop="clearSelect"></Icon>
+                <Icon type="arrow-down-b" :class="[prefixCls + '-arrow']"></Icon>
+            </slot>
+        </div>
         <Dropdown v-show="visible" transition="slide-up">
             <div>
                 <Caspanel
@@ -87,7 +90,8 @@
                 prefixCls: prefixCls,
                 visible: false,
                 selected: [],
-                tmpSelected: []
+                tmpSelected: [],
+                updatingValue: false    // to fix set value in changeOnSelect type
             };
         },
         computed: {
@@ -123,6 +127,13 @@
             },
             handleClose () {
                 this.visible = false;
+            },
+            toggleOpen () {
+                if (this.visible) {
+                    this.handleClose();
+                } else {
+                    this.onFocus();
+                }
             },
             onFocus () {
                 this.visible = true;
@@ -162,6 +173,7 @@
                     });
 
                     if (!fromInit) {
+                        this.updatingValue = true;
                         this.value = newVal;
                         this.emitValue(this.value, oldVal);
                     }
@@ -186,7 +198,11 @@
                 }
             },
             value () {
-                this.updateSelected();
+                if (this.updatingValue) {
+                    this.updatingValue = false;
+                    return;
+                }
+                this.updateSelected(true);
             }
         }
     };
